@@ -29,7 +29,7 @@ def upload_file(self, file, location):
     Wait(self.driver, 30).until(presence_of_element_located((By.CSS_SELECTOR, ".sx-uploader-container #fileElem")))
     self.driver.find_element(By.CSS_SELECTOR, ".sx-uploader-container #fileElem").send_keys(location)
     Wait(self.driver, 30).until(presence_of_element_located((By.CSS_SELECTOR, "div.v-row:nth-child(5)")))
-    self.driver.find_element(By.CSS_SELECTOR, ".form-nav-btn").click()
+    scroll_and_click(self, '.form-nav-btn')
 
 
 @then('I add the artist names')
@@ -53,9 +53,20 @@ def band_names(self):
     scroll_and_click(self, '.v-btn--variant-outlined')
 
 
+@then('I Choose the right owner type as individual')
+def ro_type(self):
+    self.driver.find_element(By.CSS_SELECTOR, "#rights-owner-type-0").click()
+
+
 @then('I Choose the right owner type as company')
 def ro_type(self):
     self.driver.find_element(By.CSS_SELECTOR, "#rights-owner-type-1").click()
+
+
+@then('I Choose the right owner type as individual and click next')
+def ro_type(self):
+    self.driver.find_element(By.CSS_SELECTOR, "#rights-owner-type-0").click()
+    scroll_and_click(self, '.form-nav-btn')
 
 
 @then('I set {name} as ro company name')

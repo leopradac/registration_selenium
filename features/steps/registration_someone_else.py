@@ -33,7 +33,7 @@ def performer_list(self):
 def step_impl(context, who_type):
     """who_type: performer | both | rights-owner"""
     table = context.someone_else_dataset
-    for index, artis in enumerate(table):
+    for index, artist in enumerate(table):
         context.someone_else_index = index
         context.execute_steps('Then at registration/ID/contact I fill the form')
         context.execute_steps('Then I upload the photo ID from /Users/Shared/sx/upload.png')
@@ -60,7 +60,7 @@ def someone_else_contact(self):
         time.sleep(2)
         if zip_c:
             zip_c.send_keys(data['zip'])
-            scroll_and_type(self, '#state', data['state'])
+            scroll_and_type(self, '#stateProvince', data['state'])
     except NoSuchElementException as e:
         pass
     scroll_and_type(self, '#countryOfBirth', data['birth'])

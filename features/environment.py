@@ -7,6 +7,8 @@ def before_all(context):
     debug_on = os.environ.get('DEBUG_ON', False)
     options = webdriver.ChromeOptions()
 
+    # options.add_argument(r'--headless=new')
+
     if debug_on == 'true':
 
         # provide location where chrome stores profiles

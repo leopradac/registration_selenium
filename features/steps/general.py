@@ -12,6 +12,7 @@ use_step_matcher("re")
 
 @given('I open the website (?P<url>.+)')
 def open_website(context, url):
+    context.base_url = url
     context.driver.get(url)
 
 
@@ -68,24 +69,25 @@ def general_contact_info(self):
     scroll_and_click(self, '#more-about-you > button')
 
 
-@then('I fill general contact address')
-def general_contact_address(self):
-    # open country dropdown
-    self.driver.find_element(By.XPATH, "//div[4]/i").click()
-    # wait to display options
-    Wait(self.driver, 30).until(visibility_of_element_located((By.XPATH, "//div[4]/div/div/div/div/div[2]/div")))
-    # select usa
-    self.driver.find_element(By.XPATH, "//div[4]/div/div/div/div/div[2]/div").click()
+@then('I fill general contact address and use (?P<selection>suggested|mine) address')
+def general_contact_address(self, selection):
+    question_map = {
+        'suggested': '#confirm-modal .bg-primary',
+        'mine': '.v-btn--variant-outlined'
+    }
+    zipcode, address = self.table[0]
+    time.sleep(0.5)
+    self.driver.find_element(By.CSS_SELECTOR, "input").send_keys('united states')
     # type zipcode
     time.sleep(0.5)
     self.driver.find_element(By.CSS_SELECTOR, "[id|=\"zip-code\"]").clear()
-    self.driver.find_element(By.CSS_SELECTOR, "[id|=\"zip-code\"]").send_keys("10128", Keys.TAB)
-    self.driver.find_element(By.CSS_SELECTOR, "[id|=\"address\"]").send_keys("5th")
+    self.driver.find_element(By.CSS_SELECTOR, "[id|=\"zip-code\"]").send_keys(zipcode, Keys.TAB)
+    self.driver.find_element(By.CSS_SELECTOR, "[id|=\"address\"]").send_keys(address)
     # next
     self.driver.find_element(By.CSS_SELECTOR, ".form-nav-btn").click()
     # popup - use my address
     Wait(self.driver, 30).until(visibility_of_element_located((By.CSS_SELECTOR, ".v-btn--variant-outlined")))
-    self.driver.find_element(By.CSS_SELECTOR, ".v-btn--variant-outlined").click()
+    self.driver.find_element(By.CSS_SELECTOR, question_map[selection]).click()
 
 
 @then('I check review page and accept it')
